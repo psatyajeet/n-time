@@ -1,12 +1,18 @@
 # Transit Glow
 
-## Set up with a coding agent
-
-> Help me build https://github.com/psatyajeet/transit-glow. Ask what computer I use and which two Bay Area stops and directions I want. Help me preview live arrivals before I buy parts. Then walk me through the hardware setup one step at a time. I’ll enter my 511 token and Wi-Fi password in my own terminal.
-
 ![N Judah LED board showing the next two trains in each direction](docs/board-photo-wide.jpg)
 
 Data provided by [511.org](https://511.org).
+
+## Set up with a coding agent
+
+```text
+Help me build https://github.com/psatyajeet/transit-glow. Ask what
+computer I use and which two Bay Area stops and directions I want.
+Help me preview live arrivals before I buy parts. Then walk me
+through the hardware setup one step at a time. I’ll enter my 511
+token and Wi-Fi password in my own terminal.
+```
 
 ## Preview your stops
 
