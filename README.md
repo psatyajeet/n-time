@@ -17,6 +17,24 @@ in whole minutes. `DUE` means less than a minute.
 You can try your own stops on a computer before buying the LED panel. Transit
 Glow uses 511 SF Bay, so start with two Bay Area stops.
 
+### Set up with a coding agent
+
+Paste this into your coding agent, ChatGPT, or Claude. If it cannot open
+GitHub, give it this README.
+
+> Help me build Transit Glow for my stops using https://github.com/psatyajeet/transit-glow.
+> Ask which computer I use and which Bay Area stops, routes, and directions I want.
+> Help me find the stop IDs and get my own free 511 token. Walk me through
+> running the setup script on my laptop, then show me the board preview so I
+> can check both directions before buying anything. I’ll enter my token and
+> Wi-Fi password privately in my own terminal.
+>
+> Once the preview looks right, use the shopping checklist to explain what I
+> need. When I have the parts, guide me through installing CircuitPython and
+> choosing the matching Adafruit library bundle. Use the setup script’s
+> `--prepare` option to assemble the board folder. Show me what to copy onto
+> `CIRCUITPY` and help me check the first arrivals. Give me one step at a time.
+
 ### Get your 511 token and stop IDs
 
 1. Request a free 511 token. It works like a password for your requests. Agree
@@ -46,9 +64,14 @@ Glow uses 511 SF Bay, so start with two Bay Area stops.
 Paste your 511 token when the script asks. The terminal will keep it hidden
 as you type. For each of your two rows, enter the stop ID and pick a route
 from the list 511 returns. The script saves your choices and shows the next
-arrivals. Compare those with your transit app during service. Use
-`python3 -m muni_board` for another one-time check, or
-`py -3 -m muni_board` on Windows.
+arrivals. Compare those with your transit app during service. To see the two rows as they’ll appear in the terminal preview, run:
+
+```sh
+python3 -m muni_board --matrix
+```
+
+On Windows, use `py -3 -m muni_board --matrix`. Each row lists the minutes
+until the next two arrivals. `DUE` means less than one minute.
 
 If 511 has no route list, enter the route from your transit map and check
 again during service. If the script shows a request error, check the token,
@@ -78,26 +101,23 @@ carries data, and a stand or mount. The kit includes the **MatrixPortal M4**,
    [MatrixPortal M4 download](https://circuitpython.org/board/matrixportal_m4/) ·
    [Adafruit’s reset and install photos](https://learn.adafruit.com/adafruit-matrixportal-m4/install-circuitpython)
 3. Download Adafruit’s [CircuitPython library bundle](https://circuitpython.org/libraries)
-   matching the first number of your CircuitPython version. For CircuitPython
-   10.x, choose the 10.x bundle. Unzip it, create a `lib` folder on
-   `CIRCUITPY` if needed, and copy these items from the bundle’s `lib` folder:
+   matching the first number of your CircuitPython version. Choose the **.mpy**
+   bundle (for example, **10.x .mpy** for CircuitPython 10), then unzip it.
+4. From the Transit Glow project folder, run the following command with the path
+   to the unzipped bundle. On Windows, use `py -3` in place of `python3`.
 
-   - `adafruit_bitmap_font/`
-   - `adafruit_bus_device/`
-   - `adafruit_display_text/`
-   - `adafruit_esp32spi/`
-   - `adafruit_connection_manager.mpy`
-   - `adafruit_requests.mpy`
-   - `adafruit_ticks.mpy`
+   ```sh
+   python3 tools/setup.py --prepare "/path/to/unzipped-bundle"
+   ```
 
-4. Run `python3 tools/setup.py --board` from the same folder
-   (`py -3 tools/setup.py --board` on Windows). Enter your 2.4 GHz Wi-Fi
-   network name and password in the terminal. The script reuses your saved
-   stops and token. Drag the resulting `device/settings.toml` onto the root
-   of the `CIRCUITPY` drive. Keep this file private.
-5. Copy `device/board_config.py`, `device/board_layout.py`,
-   `device/diagnostics.py`, and `device/muni_logic.py` into the root of
-   `CIRCUITPY`. Copy `device/code.py` there last. It runs automatically.
+   On a Mac, you can type `python3 tools/setup.py --prepare ` and drag the
+   unzipped folder into Terminal to fill in its path. The command reuses the
+   stops you already checked, or walks you through choosing them. Enter your
+   2.4 GHz Wi-Fi name and password when prompted.
+5. Open the new `Transit-Glow-board-…` folder shown in the terminal. Copy its
+   contents onto the root of `CIRCUITPY`, copying `code.py` last. The board
+   starts automatically. Keep the generated folder private because its
+   `settings.toml` contains your Wi-Fi password and 511 token.
 6. Follow the [bench checklist](BUILD_CHECKLIST.md) to verify arrivals,
    Wi-Fi recovery, and standalone power before mounting it.
 
@@ -105,20 +125,6 @@ If the drive never appears, the board stays on `CONNECT`, or the display
 keeps restarting, use the [troubleshooting checklist](BUILD_CHECKLIST.md#troubleshooting).
 The original prototype used AirLift 3.3.0 for its Wi-Fi chip. AirLift and
 CircuitPython are separate firmware updates.
-
-## Get help from ChatGPT or Claude
-
-Copy this prompt into a new chat. If the assistant cannot open GitHub, upload
-this README to the chat.
-
-> Help me set up Transit Glow using https://github.com/psatyajeet/transit-glow.
-> I’m new to this. Start by asking me what computer I use and which two transit
-> stops or public intersections, routes, and directions I want on the display.
-> Give me one step at a time, with the exact buttons to click or command to run.
-> Use the project’s setup script to check arrivals on my computer before we
-> shop. If you can’t verify a stop ID, walk me through the official 511 lookup.
-> Ask me what I see after each step. I’ll enter my 511 token and Wi-Fi
-> password in my own terminal. Never ask me to paste either into chat.
 
 <details>
 <summary>Manual setup, troubleshooting, and polling limits</summary>

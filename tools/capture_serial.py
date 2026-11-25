@@ -10,6 +10,7 @@ import time
 from datetime import datetime
 from pathlib import Path
 
+MAX_LINE_BYTES = 8192
 STOP = False
 
 
@@ -56,6 +57,7 @@ def capture(device, log_path, retry_seconds):
                 write_record(log, "serial_connected")
                 waiting_logged = False
                 pending = b""
+                discarding = False
                 while not STOP:
                     readable, _, _ = select.select([fd], [], [], 5)
                     if not readable:
@@ -63,11 +65,20 @@ def capture(device, log_path, retry_seconds):
                     chunk = os.read(fd, 4096)
                     if not chunk:
                         raise OSError("serial device disconnected")
+                    if discarding:
+                        _, newline, chunk = chunk.partition(b"\n")
+                        if not newline:
+                            continue
+                        discarding = False
                     pending += chunk
                     lines = pending.split(b"\n")
                     pending = lines.pop()
                     for line in lines:
-                        write_record(log, line.decode("utf-8", errors="replace").rstrip("\r"))
+                        write_record(log, line[:MAX_LINE_BYTES].decode("utf-8", errors="replace").rstrip("\r"))
+                    if len(pending) > MAX_LINE_BYTES:
+                        write_record(log, pending[:MAX_LINE_BYTES].decode("utf-8", errors="replace"))
+                        pending = b""
+                        discarding = True
                 if pending:
                     write_record(log, "partial=" + pending.decode("utf-8", errors="replace"))
             except (FileNotFoundError, OSError) as error:

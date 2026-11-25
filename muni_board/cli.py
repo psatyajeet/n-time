@@ -1,6 +1,8 @@
 """Command-line entry point."""
 
 import argparse
+import os
+from tempfile import NamedTemporaryFile
 import json
 import sys
 import time
@@ -32,7 +34,14 @@ def _save_raw(directory, stop_key, payload):
     path = Path(directory)
     path.mkdir(parents=True, exist_ok=True)
     target = path / f"{stop_key}.json"
-    target.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
+    with NamedTemporaryFile(mode="w", dir=path, encoding="utf-8", delete=False) as temp:
+        temporary_path = Path(temp.name)
+        try:
+            json.dump(payload, temp, indent=2, sort_keys=True)
+            temp.close()
+            os.replace(temporary_path, target)
+        finally:
+            temporary_path.unlink(missing_ok=True)
 
 
 def fetch_cycle(settings, cached_payloads=None, save_raw=None):
