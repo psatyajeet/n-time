@@ -6,6 +6,10 @@ from datetime import datetime
 from .core import minutes_until
 
 
+def terminal_text(value):
+    return "".join(char if char.isprintable() else ascii(char)[1:-1] for char in value)
+
+
 def _clock(epoch):
     value = datetime.fromtimestamp(epoch).astimezone()
     hour = value.hour % 12 or 12
@@ -41,17 +45,17 @@ def render_human(board):
             for arrival in arrivals:
                 minutes = minutes_until(arrival["eta_epoch"], now_epoch)
                 eta = "due" if minutes == 0 else f"{minutes} min"
-                details.append(f"{eta} to {arrival['destination']}")
+                details.append(f"{eta} to {terminal_text(arrival['destination'])}")
             result = "; ".join(details)
         else:
             result = "no predictions"
         lines.append(
-            f"{direction['label']} ({direction['agency']} route {direction['route']}, "
-            f"stop {direction['stop_code']}): {result}"
+            f"{direction['label']} ({terminal_text(direction['agency'])} route {terminal_text(direction['route'])}, "
+            f"stop {terminal_text(direction['stop_code'])}): {result}"
         )
 
     for key, message in board.get("errors", {}).items():
-        lines.append(f"{key.title()} data warning: {message}")
+        lines.append(f"{key.title()} data warning: {terminal_text(message)}")
     lines.append(f"Updated {_clock(now_epoch)}")
     lines.append(board["attribution"])
     return "\n".join(lines)

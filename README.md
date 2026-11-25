@@ -78,26 +78,23 @@ carries data, and a stand or mount. The kit includes the **MatrixPortal M4**,
    [MatrixPortal M4 download](https://circuitpython.org/board/matrixportal_m4/) ·
    [Adafruit’s reset and install photos](https://learn.adafruit.com/adafruit-matrixportal-m4/install-circuitpython)
 3. Download Adafruit’s [CircuitPython library bundle](https://circuitpython.org/libraries)
-   matching the first number of your CircuitPython version. For CircuitPython
-   10.x, choose the 10.x bundle. Unzip it, create a `lib` folder on
-   `CIRCUITPY` if needed, and copy these items from the bundle’s `lib` folder:
+   matching the first number of your CircuitPython version. Choose the **.mpy**
+   bundle (for example, **10.x .mpy** for CircuitPython 10), then unzip it.
+4. From the Transit Glow project folder, run the following command with the path
+   to the unzipped bundle. On Windows, use `py -3` in place of `python3`.
 
-   - `adafruit_bitmap_font/`
-   - `adafruit_bus_device/`
-   - `adafruit_display_text/`
-   - `adafruit_esp32spi/`
-   - `adafruit_connection_manager.mpy`
-   - `adafruit_requests.mpy`
-   - `adafruit_ticks.mpy`
+   ```sh
+   python3 tools/setup.py --prepare "/path/to/unzipped-bundle"
+   ```
 
-4. Run `python3 tools/setup.py --board` from the same folder
-   (`py -3 tools/setup.py --board` on Windows). Enter your 2.4 GHz Wi-Fi
-   network name and password in the terminal. The script reuses your saved
-   stops and token. Drag the resulting `device/settings.toml` onto the root
-   of the `CIRCUITPY` drive. Keep this file private.
-5. Copy `device/board_config.py`, `device/board_layout.py`,
-   `device/diagnostics.py`, and `device/muni_logic.py` into the root of
-   `CIRCUITPY`. Copy `device/code.py` there last. It runs automatically.
+   On a Mac, you can type `python3 tools/setup.py --prepare ` and drag the
+   unzipped folder into Terminal to fill in its path. The command reuses the
+   stops you already checked, or walks you through choosing them. Enter your
+   2.4 GHz Wi-Fi name and password when prompted.
+5. Open the new `Transit-Glow-board-…` folder shown in the terminal. Copy its
+   contents onto the root of `CIRCUITPY`, copying `code.py` last. The board
+   starts automatically. Keep the generated folder private because its
+   `settings.toml` contains your Wi-Fi password and 511 token.
 6. Follow the [bench checklist](BUILD_CHECKLIST.md) to verify arrivals,
    Wi-Fi recovery, and standalone power before mounting it.
 

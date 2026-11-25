@@ -8,6 +8,14 @@ from device.board_config import SettingsError, load_board_config
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 
+ENV_KEYS = {"TRANSIT_511_TOKEN", "BOARD_POLL_SECONDS", "BOARD_HTTP_TIMEOUT_SECONDS",
+            "BOARD_BADGE", "BOARD_TITLE"} | {
+    f"BOARD_ROW{row}_{field}"
+    for row in (1, 2)
+    for field in ("AGENCY", "STOP", "ROUTE", "LABEL")
+}
+
+
 def _unquote(value):
     value = value.strip()
     if len(value) >= 2 and value[0] == value[-1] and value[0] in ('"', "'"):
@@ -27,7 +35,7 @@ def load_env_file(path=None):
             continue
         key, value = line.split("=", 1)
         key = key.strip()
-        if key and key not in os.environ:
+        if key in ENV_KEYS and key not in os.environ:
             os.environ[key] = _unquote(value)
 
 
