@@ -31,6 +31,12 @@ python3 -m muni_board --matrix
 
 Setup asks for your token (the characters stay hidden), then lets you pick a route for each stop. The preview shows the minutes until the next two arrivals in each row.
 
+To check any stop, replace `STOP_ID`:
+
+```sh
+python3 tools/live.py STOP_ID
+```
+
 Setup names the rows `ROW1` and `ROW2`. To change the text on the display, edit `.env` before preparing the board:
 
 | Setting | Length | Example |
