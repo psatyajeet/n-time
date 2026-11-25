@@ -1,4 +1,4 @@
-# Transit Glow
+# N Time
 
 A 64×32 LED board that shows the next two arrivals at two Bay Area transit stops.
 
@@ -9,7 +9,7 @@ Data provided by [511.org](https://511.org).
 ## Set up with a coding agent
 
 ```text
-Help me build https://github.com/psatyajeet/transit-glow. Ask what
+Help me build https://github.com/psatyajeet/n-time. Ask what
 computer I use and which two Bay Area stops and directions I want.
 Help me preview live arrivals before I buy parts. Then walk me
 through the hardware setup one step at a time. I'll enter my 511
@@ -20,7 +20,7 @@ token and Wi-Fi password in my own terminal.
 
 Get a [free 511 token](https://511.org/open-data/token) and [look up your two stop IDs](https://511.org/travel/transit/stop-id). Choose the direction for each stop. Opposite sides of the same street can have different IDs. Use `SF` for Muni.
 
-[Download the project](https://github.com/psatyajeet/transit-glow/archive/refs/heads/main.zip), unzip it, and open the folder containing this README. On Mac, type `cd ` (with a space) in Terminal, drag that folder into the window, and press Return. On Windows, type `powershell` in the folder's address bar and press Enter.
+[Download the project](https://github.com/psatyajeet/n-time/archive/refs/heads/main.zip), unzip it, and open the folder containing this README. On Mac, type `cd ` (with a space) in Terminal, drag that folder into the window, and press Return. On Windows, type `powershell` in the folder's address bar and press Enter.
 
 Run these commands one at a time with [Python 3.11 or newer](https://www.python.org/downloads/). On Windows, use `py -3` for `python3`.
 
@@ -56,6 +56,6 @@ Setup names the rows `ROW1` and `ROW2`. To change the text on the display, edit 
    python3 tools/setup.py --prepare "/path/to/unzipped-bundle"
    ```
 
-5. Enter your 2.4 GHz Wi-Fi name and password when prompted. Open the `Transit-Glow-board-…` folder printed in the terminal. Open `CIRCUITPY` in a second window. Copy everything inside the generated folder except `code.py` directly into that drive, then copy `code.py` last. This starts the display. Keep the generated folder private because `settings.toml` holds your Wi-Fi password and 511 token.
+5. Enter your 2.4 GHz Wi-Fi name and password when prompted. Open the `N-Time-board-…` folder printed in the terminal. Open `CIRCUITPY` in a second window. Copy everything inside the generated folder except `code.py` directly into that drive, then copy `code.py` last. This starts the display. Keep the generated folder private because `settings.toml` holds your Wi-Fi password and 511 token.
 
 [Board checks and troubleshooting](BUILD_CHECKLIST.md)

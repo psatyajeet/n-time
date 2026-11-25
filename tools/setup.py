@@ -1,4 +1,4 @@
-"""Find routes for your stops and prepare your Transit Glow display."""
+"""Find routes for your stops and prepare your N Time display."""
 
 import argparse
 import json
@@ -166,7 +166,7 @@ def prepare_board(bundle):
         if result:
             return result
 
-    output = Path(mkdtemp(prefix="Transit-Glow-board-", dir=PROJECT_ROOT))
+    output = Path(mkdtemp(prefix="N-Time-board-", dir=PROJECT_ROOT))
     try:
         (output / "lib").mkdir()
         for name in BOARD_LIBRARIES:

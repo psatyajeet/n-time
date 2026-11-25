@@ -1,5 +1,5 @@
 [project]
-name = "transit-glow"
+name = "n-time"
 version = "0.1.0"
 description = "Two-row 511 SF Bay transit arrivals for MatrixPortal M4"
 readme = "README.md"
