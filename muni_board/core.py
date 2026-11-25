@@ -1,10 +1,7 @@
-"""Pure parsing and board-model functions.
-
-This module uses basic data structures so its rules can move to CircuitPython.
-"""
+"""Parse 511 responses and build the board data for the laptop preview."""
 
 class PayloadError(RuntimeError):
-    """Raised when a 511 response has a failed semantic status."""
+    """511 returned a response that reports a failure."""
 
 
 def _as_list(value):

@@ -23,6 +23,14 @@ class DeviceLogicTests(unittest.TestCase):
         payload = json.loads(FIXTURE.read_text(encoding="utf-8"))
         self.assertEqual([240, 720], parse_remaining_seconds(payload, "38"))
 
+    def test_counts_from_response_time_when_vehicle_record_is_old(self):
+        payload = json.loads(FIXTURE.read_text(encoding="utf-8"))
+        delivery = payload["Siri"]["ServiceDelivery"]["StopMonitoringDelivery"]
+        for recorded in ("2025-01-01T23:57:00Z", "1970-01-01T00:00:00Z", None):
+            for visit in delivery["MonitoredStopVisit"]:
+                visit["RecordedAtTime"] = recorded
+            self.assertEqual([240, 720], parse_remaining_seconds(payload, "38"))
+
     def test_truncates_partial_minutes(self):
         self.assertEqual("DUE 2", eta_text([59, 145]))
         self.assertEqual("1", eta_text([145], age_seconds=60))

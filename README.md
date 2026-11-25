@@ -1,5 +1,7 @@
 # Transit Glow
 
+A 64×32 LED board that shows the next two arrivals at two Bay Area transit stops.
+
 ![N Judah LED board showing the next two trains in each direction](docs/board-photo-wide.jpg)
 
 Data provided by [511.org](https://511.org).
@@ -10,7 +12,7 @@ Data provided by [511.org](https://511.org).
 Help me build https://github.com/psatyajeet/transit-glow. Ask what
 computer I use and which two Bay Area stops and directions I want.
 Help me preview live arrivals before I buy parts. Then walk me
-through the hardware setup one step at a time. I’ll enter my 511
+through the hardware setup one step at a time. I'll enter my 511
 token and Wi-Fi password in my own terminal.
 ```
 
@@ -18,7 +20,7 @@ token and Wi-Fi password in my own terminal.
 
 Get a [free 511 token](https://511.org/open-data/token) and [look up your two stop IDs](https://511.org/travel/transit/stop-id). Choose the direction for each stop. Opposite sides of the same street can have different IDs. Use `SF` for Muni.
 
-[Download the project](https://github.com/psatyajeet/transit-glow/archive/refs/heads/main.zip), unzip it, and open the folder containing this README. On Mac, type `cd ` (with a space) in Terminal, drag that folder into the window, and press Return. On Windows, type `powershell` in the folder’s address bar and press Enter.
+[Download the project](https://github.com/psatyajeet/transit-glow/archive/refs/heads/main.zip), unzip it, and open the folder containing this README. On Mac, type `cd ` (with a space) in Terminal, drag that folder into the window, and press Return. On Windows, type `powershell` in the folder's address bar and press Enter.
 
 Run these commands one at a time with [Python 3.11 or newer](https://www.python.org/downloads/). On Windows, use `py -3` for `python3`.
 
@@ -28,6 +30,14 @@ python3 -m muni_board --matrix
 ```
 
 Setup asks for your token (the characters stay hidden), then lets you pick a route for each stop. The preview shows the minutes until the next two arrivals in each row.
+
+Setup names the rows `ROW1` and `ROW2`. To change the text on the display, edit `.env` before preparing the board:
+
+| Setting | Length | Example |
+| --- | --- | --- |
+| `BOARD_BADGE` | 1 to 2 characters | `N` |
+| `BOARD_TITLE` | 1 to 8 characters | `JUDAH` |
+| `BOARD_ROW1_LABEL`, `BOARD_ROW2_LABEL` | 1 to 4 characters | `EAST`, `WEST` |
 
 ## Set up the display
 

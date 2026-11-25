@@ -1,8 +1,9 @@
 import json
 import unittest
 from email.message import Message
+from http.client import IncompleteRead
 from io import BytesIO
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 from urllib.error import HTTPError
 
 from muni_board.api import ApiError, build_url, fetch_stop, parse_511_time, redact_url
@@ -78,6 +79,15 @@ class ApiTests(unittest.TestCase):
 
         self.assertIn("Siri", payload)
         self.assertEqual(2, mocked_urlopen.call_count)
+
+    @patch("muni_board.api.urlopen")
+    def test_dropped_connections_become_api_errors(self, mocked_urlopen):
+        for error in (ConnectionResetError(), IncompleteRead(b"")):
+            response = FakeResponse(b"")
+            response.read = Mock(side_effect=error)
+            mocked_urlopen.return_value = response
+            with self.assertRaisesRegex(ApiError, "Could not reach 511"):
+                fetch_stop("token", "SF", "90001", sleep=lambda _: None)
 
 
 if __name__ == "__main__":

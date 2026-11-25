@@ -11,5 +11,6 @@ BOARD_ROW2_AGENCY = "SF"
 BOARD_ROW2_STOP = ""
 BOARD_ROW2_ROUTE = "38"
 BOARD_ROW2_LABEL = "WEST"
-# Use 150 seconds with the standard 511 quota. See the README for faster polling.
+# 150 seconds for two stops is 48 requests an hour. The standard 511 quota is 60.
+# Ask 511 for a higher quota before lowering this. The minimum is 30.
 BOARD_POLL_SECONDS = 150

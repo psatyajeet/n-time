@@ -1,11 +1,13 @@
-"""Low-write diagnostics that survive MatrixPortal resets."""
+"""Event log saved to flash so it can be read after a reset."""
 
+import os
 import time
 
 import microcontroller
 import supervisor
 
 LOG_PATH = "/muni-diagnostics.log"
+MAX_LOG_BYTES = 32768
 
 
 def _name(value):
@@ -40,10 +42,14 @@ def _line(event, details):
 
 
 def record(event, **details):
-    """Append one redacted diagnostic record; never take down the app."""
+    """Append one record. A failed write prints a message and the board keeps running."""
     line = _line(event, details)
     try:
-        with open(LOG_PATH, "a") as log:
+        try:
+            mode = "w" if os.stat(LOG_PATH)[6] > MAX_LOG_BYTES else "a"
+        except OSError:
+            mode = "a"
+        with open(LOG_PATH, mode) as log:
             log.write(line)
     except Exception as error:
         print("Diagnostics write failed: " + type(error).__name__)
@@ -51,6 +57,6 @@ def record(event, **details):
 
 
 def boot():
-    """Persist and print the reset cause at the start of every run."""
+    """Save and print the reset cause at the start of every run."""
     line = record("boot")
     print("MUNI " + line)
