@@ -9,11 +9,15 @@ Data provided by [511.org](https://511.org).
 ## Set up with a coding agent
 
 ```text
-Help me build https://github.com/psatyajeet/n-time. Ask what
-computer I use and which two Bay Area stops and directions I want.
-Help me preview live arrivals before I buy parts. Then walk me
-through the hardware setup one step at a time. I'll enter my 511
-token and Wi-Fi password in my own terminal.
+Help me build https://github.com/psatyajeet/n-time. Download it and
+read the README first. Ask what computer I use and which two Bay Area
+stops and directions I want, then help me find their 511 stop IDs.
+Check that I have Python 3.11 or newer. Give me the exact setup
+command to run in my own terminal, where I'll enter my 511 token and
+Wi-Fi password. Don't ask for them in chat or open .env or
+settings.toml. Once setup is saved, run the preview and check the
+directions with me before I buy parts. Then walk me through the
+hardware one step at a time.
 ```
 
 ## Preview your stops
