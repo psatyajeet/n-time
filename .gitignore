@@ -9,4 +9,5 @@ __pycache__/
 var/
 device/settings.toml
 /settings.toml
+/N-Time-board-*/
 /Transit-Glow-board-*/

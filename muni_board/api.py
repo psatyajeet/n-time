@@ -9,7 +9,7 @@ from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 from urllib.request import Request, urlopen
 
 API_URL = "https://api.511.org/transit/StopMonitoring"
-USER_AGENT = "transit-glow/0.1 (+https://511.org/open-data)"
+USER_AGENT = "n-time/0.1 (+https://511.org/open-data)"
 
 
 class ApiError(RuntimeError):

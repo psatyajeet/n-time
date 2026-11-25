@@ -107,7 +107,7 @@ class SafeSetupTests(unittest.TestCase):
                 redirect_stdout(io.StringIO()),
             ):
                 self.assertEqual(0, setup.main(["--prepare", str(bundle.parent)]))
-            folder, = root.glob("Transit-Glow-board-*")
+            folder, = root.glob("N-Time-board-*")
             self.assertEqual(set(setup.BOARD_FILES) | {"lib", "settings.toml"},
                              {file.name for file in folder.iterdir()})
             self.assertEqual(set(setup.BOARD_LIBRARIES), {file.name for file in (folder / "lib").iterdir()})
