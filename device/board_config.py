@@ -18,7 +18,7 @@ def _required(getenv, name):
 def _display_text(getenv, name, width, characters):
     value = _required(getenv, name).upper()
     if len(value) > width or any(char not in characters for char in value):
-        raise SettingsError(name + " must be 1–" + str(width) + " display characters")
+        raise SettingsError(name + " must be 1 to " + str(width) + " display characters")
     return value
 
 

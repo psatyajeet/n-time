@@ -24,7 +24,7 @@ def _unquote(value):
 
 
 def load_env_file(path=None):
-    """Load a small KEY=VALUE file without adding a runtime dependency."""
+    """Load KEY=VALUE lines from .env."""
     path = Path(path or PROJECT_ROOT / ".env")
     if not path.exists():
         return

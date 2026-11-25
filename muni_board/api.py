@@ -1,9 +1,10 @@
-"""Laptop HTTP adapter for the 511 StopMonitoring API."""
+"""Fetch 511 StopMonitoring data on the laptop."""
 
 import json
 import time
 from datetime import datetime
-from urllib.error import HTTPError, URLError
+from http.client import HTTPException
+from urllib.error import HTTPError
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 from urllib.request import Request, urlopen
 
@@ -12,7 +13,7 @@ USER_AGENT = "transit-glow/0.1 (+https://511.org/open-data)"
 
 
 class ApiError(RuntimeError):
-    """A safe API error that does not contain the query-string token."""
+    """An API error whose message leaves out the token."""
 
 
 def build_url(token, agency, stop_code):
@@ -65,7 +66,7 @@ def fetch_stop(token, agency, stop_code, timeout_seconds=15, sleep=time.sleep):
             if exc.code == 429:
                 message += "; wait for the rate-limit window"
             raise ApiError(message) from None
-        except (URLError, TimeoutError):
+        except (OSError, HTTPException):
             if attempt == 0:
                 sleep(1)
                 continue

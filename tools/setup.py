@@ -118,7 +118,7 @@ def setup_stops(path, replace):
     print(render_human(board))
     if any(not row["arrivals"] for row in board["directions"].values()):
         print("For a row with no arrivals, check the stop and route again during service.")
-    print("\nOnce you have the hardware, see “Set up the display” in README.md.")
+    print('\nOnce you have the hardware, see "Set up the display" in README.md.')
     return 0
 
 

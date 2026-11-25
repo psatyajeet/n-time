@@ -19,8 +19,8 @@ def _parser():
         description="Show 511 SF Bay arrivals for two configured stops and routes"
     )
     output = parser.add_mutually_exclusive_group()
-    output.add_argument("--matrix", action="store_true", help="show the 64 x 32 text model")
-    output.add_argument("--json", action="store_true", help="print the board model as JSON")
+    output.add_argument("--matrix", action="store_true", help="show the text for the 64 x 32 panel")
+    output.add_argument("--json", action="store_true", help="print the board data as JSON")
     parser.add_argument("--watch", action="store_true", help="refresh continuously")
     parser.add_argument(
         "--save-raw",

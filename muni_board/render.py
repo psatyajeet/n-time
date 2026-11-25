@@ -1,4 +1,4 @@
-"""Terminal and 64 x 32 text-model renderers."""
+"""Render the board as terminal text or JSON."""
 
 import json
 from datetime import datetime
@@ -27,7 +27,7 @@ def _eta_text(arrivals, now_epoch, empty="--"):
 
 
 def render_matrix(board):
-    """Render the content model that will fit a 64 x 32 panel."""
+    """Render the text shown on the 64 x 32 panel."""
     now_epoch = board["generated_epoch"]
     lines = [f"{board['badge']} {board['title']}"]
     for row in board["directions"].values():

@@ -27,7 +27,7 @@ from watchdog import WatchDogMode
 API_URL = "https://api.511.org/transit/StopMonitoring"
 STALE_SECONDS = 600
 EXPIRED_SECONDS = 1800
-REQUEST_TIMEOUT = 10
+REQUEST_TIMEOUT = 5  # The HTTP library tries twice, so two waits must fit in the watchdog window.
 WATCHDOG_TIMEOUT = 16
 
 class CountdownFont:
@@ -122,7 +122,8 @@ def sleep_with_watchdog(seconds):
     while time.monotonic() < deadline:
         feed_watchdog()
         remaining = deadline - time.monotonic()
-        time.sleep(1 if remaining > 1 else remaining)
+        # The deadline can pass between the two clock reads.
+        time.sleep(max(0, min(1, remaining)))
 
 
 def set_label_text(name, value):
@@ -223,9 +224,7 @@ def render(config, cache, fetched_at, now, has_error):
 
     title = config["title"]
     if has_error:
-        title = "API ERR"
-    elif stale:
-        title = "STALE"
+        title = "STALE" if stale else "API ERR"
     show(rows[0], rows[1], title=title)
 
 
@@ -251,6 +250,7 @@ def run():
     next_fetch = 0
     next_gc = 0
     had_error = False
+    last_success = time.monotonic()
 
     while True:
         feed_watchdog()
@@ -275,13 +275,18 @@ def run():
                     try:
                         feed_watchdog()
                         cache[key] = fetch_stop(session, token, row)
-                        fetched_at[key] = time.monotonic()
+                        fetched_at[key] = last_success = time.monotonic()
                         feed_watchdog()
                     except Exception as error:  # Preserve cached data on transient failures.
                         had_error = True
                         print(key + " fetch failed: " + type(error).__name__)
                         diagnostics_record("fetch_failed", stop=key, error=type(error).__name__)
                     gc.collect()
+
+            # Every cached value has expired, so a restart loses nothing and clears stuck sockets.
+            if time.monotonic() - last_success > EXPIRED_SECONDS:
+                diagnostics_record("no_data_restart")
+                raise RuntimeError("no successful fetch")
 
             next_fetch = time.monotonic() + config["poll_seconds"]
 

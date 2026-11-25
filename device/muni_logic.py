@@ -1,4 +1,4 @@
-"""Small 511 parsing helpers that run on CPython and CircuitPython."""
+"""Parse 511 arrivals. Runs on CPython and CircuitPython."""
 
 
 _MONTH_DAYS = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
@@ -72,6 +72,7 @@ def _text(value):
 
 
 def _visits(payload):
+    """Return each visit with the time 511 built the response."""
     root = payload.get("Siri", payload)
     services = _as_list(root.get("ServiceDelivery"))
     if not services:
@@ -81,7 +82,9 @@ def _visits(payload):
         _check_status(service)
         for delivery in _as_list(service.get("StopMonitoringDelivery")):
             _check_status(delivery)
-            visits.extend(_as_list(delivery.get("MonitoredStopVisit")))
+            responded = _text(service.get("ResponseTimestamp"))
+            for visit in _as_list(delivery.get("MonitoredStopVisit")):
+                visits.append((visit, responded))
     return visits
 
 
@@ -117,11 +120,14 @@ def _arrival_time(call):
 
 
 def parse_remaining_seconds(payload, route, limit=2):
-    """Return arrival seconds relative to each visit's recorded timestamp."""
+    """Return arrival seconds measured from the response time.
+
+    The vehicle's recorded time is a fallback. It can be minutes old.
+    """
     arrivals = []
     seen = set()
 
-    for visit in _visits(payload):
+    for visit, responded in _visits(payload):
         journey = visit.get("MonitoredVehicleJourney") or {}
         if _text(journey.get("LineRef")) != route:
             continue
@@ -129,12 +135,12 @@ def parse_remaining_seconds(payload, route, limit=2):
         if _cancelled(journey, call):
             continue
 
-        recorded = _text(visit.get("RecordedAtTime"))
+        reference = responded or _text(visit.get("RecordedAtTime"))
         expected = _arrival_time(call)
-        if not recorded or not expected:
+        if not reference or not expected:
             continue
         try:
-            remaining = parse_iso_seconds(expected) - parse_iso_seconds(recorded)
+            remaining = parse_iso_seconds(expected) - parse_iso_seconds(reference)
         except (TypeError, ValueError):
             continue
         if remaining < -30 or remaining > 10800:
